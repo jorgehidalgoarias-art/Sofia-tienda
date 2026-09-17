@@ -84,9 +84,13 @@ button,a{-webkit-tap-highlight-color:transparent}
 .carrito-instrucciones{font-size:13.5px;line-height:1.5;margin:12px 0}
 .transfer-alias{display:flex;align-items:center;gap:10px;margin-top:8px;font-weight:900;font-size:14px;background:var(--fondo);padding:10px 14px;border-radius:14px}
 
-/* ── sección asistente (chat + voz) ── */
-.asistente-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:760px){.asistente-grid{grid-template-columns:1fr}}
+/* ── SofIA: una sola tarjeta, texto o voz a elección ── */
+.sofia-conversacion-zona{max-width:480px;margin:0 auto;width:100%}
+.sofia-conversacion{width:100%}
+.sofia-modos{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
+.sofia-modo{border:1.5px solid var(--linea);background:#fff;color:var(--gris);font-family:inherit;font-weight:700;font-size:13px;padding:8px 18px;border-radius:30px;cursor:pointer;transition:.15s}
+.sofia-modo:hover{border-color:var(--rojo)}
+.sofia-modo-activo{background:var(--rojo);border-color:var(--rojo);color:#fff}
 
 /* ── desafíos ── */
 .desafios-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--sombra);padding:26px;max-width:560px;margin:0 auto}

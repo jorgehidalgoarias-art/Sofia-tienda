@@ -100,15 +100,19 @@ export function consultarHistorialCliente(identificador) {
 }
 
 // ────────────────────────────────────────────────────────────────────────
-// El chat con SofIA — mismo contrato que el tablero: POST con
-// Content-Type text/plain (evita el preflight de CORS) y el token
-// adentro del body.
+// El chat con SofIA-vendedora — a propósito usa `action=chatVendedora`,
+// NO `action=chat` (esa es la versión del tablero interno, con acceso a
+// stock/ventas/caja). Acá, del lado del backend, SofIA no recibe
+// ninguna herramienta: solo puede charlar de café en general y de Costa
+// Rica, nunca dar datos operativos del local. Mismo contrato de
+// transporte que el resto: POST con Content-Type text/plain (evita el
+// preflight de CORS) y el token adentro del body.
 // ────────────────────────────────────────────────────────────────────────
-export async function chatConSofia(historial) {
+export async function chatVendedora(historial) {
   chequearUrl()
   chequearToken()
   const url = new URL(BASE_URL)
-  url.searchParams.set('action', 'chat')
+  url.searchParams.set('action', 'chatVendedora')
   const res = await fetch(url.toString(), {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
