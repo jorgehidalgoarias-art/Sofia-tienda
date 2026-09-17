@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { consultarHistorialCliente } from '../api'
+import { nombreParaMostrar } from './Identificacion'
 
 // ────────────────────────────────────────────────────────────────────────
 // Cuando el cliente ya se identificó, buscamos su historial real de
@@ -17,17 +18,18 @@ export default function Bienvenida({ cliente }) {
   }, [cliente])
 
   if (!cliente) return null
+  const nombre = nombreParaMostrar(cliente)
 
   return (
     <div className="bienvenida">
       {historial?.encontrado ? (
         <>
-          ¡Qué bueno tenerte de nuevo, <b>{cliente.nombre}</b>! Ya pediste{' '}
+          ¡Qué bueno tenerte de nuevo, <b>{nombre}</b>! Ya pediste{' '}
           <b>{historial.bebidas_compradas}</b> {historial.bebidas_compradas === 1 ? 'bebida' : 'bebidas'} acá,
           y tu favorito es <b>{historial.favorito}</b> ({historial.veces_favorito}×). ¿Repetimos?
         </>
       ) : (
-        <>¡Bienvenido, <b>{cliente.nombre}</b>! Este es tu primer pedido con nosotros — mirá la carta y armá el tuyo.</>
+        <>¡Bienvenido, <b>{nombre}</b>! Este es tu primer pedido con nosotros — mirá la carta y armá el tuyo.</>
       )}
     </div>
   )
