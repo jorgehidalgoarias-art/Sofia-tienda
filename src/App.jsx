@@ -1,23 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import Header from './components/Header'
-import Identificacion, { cargarCliente } from './components/Identificacion'
-import Bienvenida from './components/Bienvenida'
-import Catalogo from './components/Catalogo'
-import Carrito from './components/Carrito'
-import ChatSofia from './components/ChatSofia'
-import VozSofia from './components/VozSofia'
+import NavBar from './components/NavBar'
+import { cargarCliente } from './components/Identificacion'
+import { cargarCarrito, guardarCarrito } from './carrito'
+import Inicio from './pages/Inicio'
+import Pedido from './pages/Pedido'
+import Sofia from './pages/Sofia'
 import Desafios from './components/Desafios'
 
 // ────────────────────────────────────────────────────────────────────────
 // Prototipo local de la TIENDA de SofIA — separado a propósito del
-// tablero interno (sofia-clase2-react). Acá solo vive lo que un cliente
-// real debería ver: la carta con disponibilidad real, el pedido, el chat
-// y la voz de SofIA como vendedora, y los desafíos. Nada de caja, ventas
-// históricas, bitácora ni mensajes internos del equipo.
+// tablero interno (sofia-clase2-react). Ahora con páginas de verdad:
+// Inicio (el local + la carta) es la puerta de entrada; decidir comprar
+// lleva a "Tu pedido", una página aparte, para que mirar el menú no se
+// sienta como estar comprando. Chat/voz y desafíos también tienen su
+// propia página, así el inicio queda simple.
+//
+// El estado del cliente y del carrito vive acá arriba (persistido en
+// localStorage) y se pasa a cada página vía el context de la ruta
+// (useOutletContext) — así sobrevive la navegación entre páginas.
 // ────────────────────────────────────────────────────────────────────────
-export default function App() {
-  const [cliente, setCliente] = useState(cargarCliente) // { nombre, email, telefono } | null
-  const [carrito, setCarrito] = useState([]) // [{ id, nombre, precio, cantidad }]
+function Layout() {
+  const [cliente, setCliente] = useState(cargarCliente)
+  const [carrito, setCarrito] = useState(cargarCarrito)
+
+  useEffect(() => {
+    guardarCarrito(carrito)
+  }, [carrito])
 
   function agregarAlCarrito(item, cantidad) {
     setCarrito((actual) => {
@@ -33,36 +43,33 @@ export default function App() {
     setCarrito((actual) => actual.filter((c) => c.id !== id))
   }
 
+  const cantidadCarrito = carrito.reduce((s, c) => s + c.cantidad, 0)
+
   return (
     <>
       <Header />
+      <NavBar cantidadCarrito={cantidadCarrito} />
       <main className="tienda-main">
-        <div className="identificacion-zona">
-          <Identificacion cliente={cliente} onCambiar={setCliente} />
-          <Bienvenida cliente={cliente} />
-        </div>
-
-        <div className="catalogo-y-carrito">
-          <Catalogo carrito={carrito} onAgregar={agregarAlCarrito} />
-          <Carrito carrito={carrito} cliente={cliente} onQuitar={quitarDelCarrito} onVaciar={() => setCarrito([])} />
-        </div>
-
-        <section className="asistente">
-          <div className="asistente-header">
-            <h2>Hablá con SofIA</h2>
-            <span className="catalogo-sub">Preguntale por la carta, pedile una recomendación, o charlemos de café</span>
-          </div>
-          <div className="asistente-grid">
-            <ChatSofia />
-            <VozSofia />
-          </div>
-        </section>
-
-        <Desafios />
+        <Outlet context={{ cliente, setCliente, carrito, agregarAlCarrito, quitarDelCarrito, vaciarCarrito: () => setCarrito([]) }} />
       </main>
       <footer className="tienda-footer">
         Prototipo local · Café SofIA — ADEN Business School
       </footer>
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/pedido" element={<Pedido />} />
+          <Route path="/sofia" element={<Sofia />} />
+          <Route path="/desafios" element={<Desafios />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }

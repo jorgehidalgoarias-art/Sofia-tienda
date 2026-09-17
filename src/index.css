@@ -17,8 +17,22 @@ body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(-
 .tienda-marca p{font-size:12.5px;opacity:.85;font-weight:300}
 .tienda-slogan{font-size:14px;opacity:.9;max-width:520px;margin:0 auto}
 
-.tienda-main{max-width:1100px;margin:0 auto;padding:28px 22px 60px;display:flex;flex-direction:column;gap:36px}
+.tienda-main{max-width:1100px;margin:0 auto;padding:28px 22px 60px;display:flex;flex-direction:column;gap:28px}
 .tienda-footer{text-align:center;color:var(--gris);font-size:12px;padding:24px;opacity:.8}
+
+/* ── navegación entre páginas ── */
+.navbar{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--linea);padding:12px 16px;position:sticky;top:0;z-index:10}
+.navbar-link{color:var(--gris);text-decoration:none;font-weight:700;font-size:13px;padding:7px 14px;border-radius:30px;transition:.15s}
+.navbar-link:hover{background:var(--fondo);color:var(--rojo)}
+.navbar-activo{background:var(--rojo);color:#fff}
+.navbar-activo:hover{background:var(--rojo);color:#fff}
+.navbar-pedido{border:1.5px solid var(--rojo);color:var(--rojo)}
+.navbar-pedido.navbar-activo{background:var(--rojo);color:#fff}
+
+.pagina-header{margin-bottom:-8px}
+.pagina-header h2{font-size:21px;font-weight:900;margin-bottom:4px}
+.pedido-contenido{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:16px;align-items:center}
+.pedido-contenido .carrito{width:100%}
 
 /* ── identificación del cliente + bienvenida ── */
 .identificacion-zona{display:flex;flex-direction:column;gap:10px}
@@ -54,11 +68,7 @@ body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(-
 .producto-btn{width:100%}
 .producto-en-carrito{margin-top:8px;font-size:11px;color:var(--ok);font-weight:700}
 
-/* ── catálogo + carrito, lado a lado en desktop ── */
-.catalogo-y-carrito{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start}
-@media(max-width:880px){.catalogo-y-carrito{grid-template-columns:1fr}}
-.catalogo{min-width:0}
-.carrito{position:sticky;top:20px}
+/* ── carrito (ahora vive en su propia página, /pedido) ── */
 .carrito h3{font-size:14px;font-weight:900;margin-bottom:14px}
 .carrito-lista{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .carrito-fila{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;border-bottom:1px solid var(--linea);padding-bottom:8px}
