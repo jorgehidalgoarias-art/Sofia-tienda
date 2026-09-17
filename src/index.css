@@ -7,7 +7,8 @@
   --radius:24px; --sombra:0 8px 30px rgba(0,0,0,.06);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(--tinta);-webkit-font-smoothing:antialiased}
+body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(--tinta);-webkit-font-smoothing:antialiased;padding-left:env(safe-area-inset-left,0);padding-right:env(safe-area-inset-right,0)}
+button,a{-webkit-tap-highlight-color:transparent}
 
 /* ── header de la tienda ── */
 .tienda-header{background:linear-gradient(135deg,var(--rojo),#4a2e0f);color:#fff;padding:32px 26px;text-align:center}
@@ -22,7 +23,7 @@ body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(-
 
 /* ── navegación entre páginas ── */
 .navbar{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--linea);padding:12px 16px;position:sticky;top:0;z-index:10}
-.navbar-link{color:var(--gris);text-decoration:none;font-weight:700;font-size:13px;padding:7px 14px;border-radius:30px;transition:.15s}
+.navbar-link{color:var(--gris);text-decoration:none;font-weight:700;font-size:13px;padding:10px 14px;border-radius:30px;transition:.15s;display:inline-flex;align-items:center}
 .navbar-link:hover{background:var(--fondo);color:var(--rojo)}
 .navbar-activo{background:var(--rojo);color:#fff}
 .navbar-activo:hover{background:var(--rojo);color:#fff}
@@ -40,7 +41,7 @@ body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(-
 .identificacion-form input{border:1px solid var(--linea);border-radius:30px;padding:8px 14px;font-family:inherit;font-size:13.5px;outline:none;min-width:0}
 .identificacion-form input:focus{border-color:var(--rojo)}
 .identificacion-o{color:var(--gris);font-size:12px}
-.identificacion-link{border:0;background:none;color:var(--gris);text-decoration:underline;font-size:12.5px;cursor:pointer;font-family:inherit}
+.identificacion-link{border:0;background:none;color:var(--gris);text-decoration:underline;font-size:12.5px;cursor:pointer;font-family:inherit;padding:8px 2px}
 .identificacion-link:hover{color:var(--rojo)}
 .bienvenida{background:#fff8ef;border:1px solid #f0c98a;border-radius:16px;padding:12px 16px;font-size:13.5px;line-height:1.5}
 
@@ -63,7 +64,7 @@ body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(-
 
 .producto-agregar{margin-top:12px;display:flex;flex-direction:column;gap:8px;align-items:center}
 .producto-stepper{display:flex;align-items:center;gap:12px;font-weight:900}
-.producto-stepper button{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--linea);background:#fff;font-size:15px;line-height:1;cursor:pointer}
+.producto-stepper button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--linea);background:#fff;font-size:16px;line-height:1;cursor:pointer}
 .producto-stepper button:disabled{opacity:.4;cursor:default}
 .producto-btn{width:100%}
 .producto-en-carrito{margin-top:8px;font-size:11px;color:var(--ok);font-weight:700}
@@ -73,7 +74,7 @@ body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(-
 .carrito-lista{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .carrito-fila{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;border-bottom:1px solid var(--linea);padding-bottom:8px}
 .carrito-fila-derecha{display:flex;align-items:center;gap:10px}
-.carrito-quitar{border:0;background:none;color:var(--bajo);cursor:pointer;font-size:14px;font-weight:900}
+.carrito-quitar{border:0;background:none;color:var(--bajo);cursor:pointer;font-size:16px;font-weight:900;padding:8px;min-width:34px;min-height:34px}
 .carrito-total{display:flex;justify-content:space-between;font-weight:900;font-size:16px;margin:12px 0 16px;padding-top:6px}
 .carrito-instrucciones{font-size:13.5px;line-height:1.5;margin:12px 0}
 .transfer-alias{display:flex;align-items:center;gap:10px;margin-top:8px;font-weight:900;font-size:14px;background:var(--fondo);padding:10px 14px;border-radius:14px}
@@ -178,3 +179,18 @@ body{font-family:'Lato',system-ui,sans-serif;background:var(--fondo);color:var(-
 @keyframes sf-barra{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1.35)}}
 
 ::-webkit-scrollbar{width:7px}::-webkit-scrollbar-thumb{background:#d8d8d8;border-radius:30px}
+
+/* Celular acostado (pantalla baja): el ancho sobra pero el alto
+   escasea — achicamos el header y el avatar para que entre más
+   contenido, en vez de forzar un layout distinto. */
+@media(orientation:landscape) and (max-height:500px){
+  .tienda-header{padding:14px 20px}
+  .tienda-marca{margin-bottom:2px}
+  .tienda-slogan{display:none}
+  .navbar{padding:8px 16px}
+  .tienda-main{padding:16px 20px 40px;gap:20px}
+  .chat-avatar-zona{padding:6px 0 8px}
+  .chat-avatar-zona::before{width:96px;height:96px}
+  .sofia-foto{width:70px!important;height:70px!important}
+  .chat-historial{max-height:140px}
+}
