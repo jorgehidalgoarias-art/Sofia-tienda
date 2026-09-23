@@ -84,9 +84,35 @@ export async function obtenerCatalogo() {
  * `items`: [{ id_item, cantidad }, ...]. `cliente` es opcional:
  * { nombre, email, telefono } — si viene, queda guardado junto al
  * pedido y se usa para el historial de compras.
+ *
+ * NO USAR desde el carrito: deja el pedido "pendiente" hasta que un
+ * admin confirme el pago a mano. El carrito usa confirmarPedido (abajo),
+ * que liquida todo en el momento. Se deja acá por si en el futuro hace
+ * falta el flujo de pago diferido (por ejemplo, para un canal aparte).
  */
 export function crearPedido(items, cliente) {
   return probarHerramienta('crearPedidoTransferencia', { items, cliente })
+}
+
+/**
+ * Confirma la compra YA, en el momento en que el cliente aprieta
+ * "Confirmar pedido" — a diferencia de crearPedido, esto no pasa por
+ * Apps Script directo desde el navegador: llama a nuestra propia función
+ * serverless (api/confirmar-pedido.js), que es la que de verdad tiene el
+ * token para hablarle a Apps Script. Así ni la URL del backend para esta
+ * acción ni el token quedan expuestos en el bundle del cliente.
+ * `items`: [{ id_item, cantidad }, ...]. `cliente` es opcional, igual que
+ * en crearPedido.
+ */
+export async function confirmarPedido(items, cliente) {
+  const res = await fetch('/api/confirmar-pedido', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items, cliente })
+  })
+  const data = await res.json()
+  if (!res.ok || !data.ok) throw new Error(data.error || 'No se pudo confirmar el pedido.')
+  return data
 }
 
 /**

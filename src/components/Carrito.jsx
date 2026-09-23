@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { crearPedido } from '../api'
+import { confirmarPedido } from '../api'
 
 function fmt(n) {
   return '₡' + Number(n || 0).toLocaleString('es-CR')
@@ -7,11 +7,13 @@ function fmt(n) {
 
 // ────────────────────────────────────────────────────────────────────────
 // El carrito del cliente. Al confirmar, el backend vuelve a chequear el
-// stock real antes de crear el pedido (por si algo cambió desde que se
-// armó el carrito) — si algo ya no alcanza, avisa cuál, sin crear nada a
-// medias. Si todo está bien, deja el pedido "pendiente" y devuelve el
-// alias de SINPE Móvil para transferir; el equipo lo confirma después
-// desde /admin, y recién ahí se descuenta stock y se registra la venta.
+// stock real antes de liquidar nada (por si algo cambió desde que se
+// armó el carrito) — si algo ya no alcanza, avisa cuál, sin tocar nada a
+// medias. Si todo está bien, el pedido queda liquidado YA MISMO (stock
+// descontado, caja sumada, venta registrada) y se muestra el alias de
+// SINPE Móvil para que el cliente transfiera. La llamada sale del
+// navegador hacia /api/confirmar-pedido (nuestra propia función
+// serverless), nunca directo a Apps Script.
 // ────────────────────────────────────────────────────────────────────────
 export default function Carrito({ carrito, cliente, onQuitar, onVaciar }) {
   const [confirmando, setConfirmando] = useState(false)
@@ -25,7 +27,7 @@ export default function Carrito({ carrito, cliente, onQuitar, onVaciar }) {
     setError(null)
     setConfirmando(true)
     try {
-      const resultado = await crearPedido(
+      const resultado = await confirmarPedido(
         carrito.map((c) => ({ id_item: c.id, cantidad: c.cantidad })),
         cliente || undefined
       )
